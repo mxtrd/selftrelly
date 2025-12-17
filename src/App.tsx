@@ -1,33 +1,26 @@
 import './App.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
-const tasks = [
-    {
-        id: 1,
-        title: "Купить продукты на неделю",
-        isDone: false,
-        addedAt: "1 сентября",
-        priority: 2,
-    },
-    {
-        id: 2,
-        title: "Полить цветы",
-        isDone: true,
-        addedAt: "2 сентября",
-        priority: 0,
-    },
-    {
-        id: 3,
-        title: "Сходить на тренировку",
-        isDone: false,
-        addedAt: "3 сентября",
-        priority: 1,
-    },
-]
 
 export function App() {
 
     const [selectedTaskId, setSelectedTaskId] = useState(null)
+    const [tasks, setTasks] = useState(null)
+
+    const prepareHeaders = () => {
+        const apiKey = import.meta.env.VITE_API_KEY
+        if(!apiKey) return undefined
+        return {
+            'api-key' : apiKey
+        }
+    }
+
+    useEffect(() => {
+        fetch('https://trelly.it-incubator.app/api/1.0/boards/tasks', {
+            headers: prepareHeaders()
+        }).then(res => res.json())
+            .then(json => setTasks(json.data))
+    }, [])
 
     if (tasks === null) {
         return 'загрузка...'
@@ -42,18 +35,14 @@ export function App() {
             <button onClick={() => setSelectedTaskId(null)}>Сбросить выделение</button>
             <ul className='list'>
                 {tasks.map((task) => (
-                    <li className='item' key={task.id} onClick={() => {
-                            setSelectedTaskId(task.id)
-                            // alert(task.id)
-                    }
-                    }
+                    <li className='item' key={task.id} onClick={() => {setSelectedTaskId(task.id)}}
                         style={{
-                            backgroundColor: task.priority >= 2 ? 'orange' : 'transparent',
+                            backgroundColor: task.attributes.priority >= 2 ? 'orange' : 'transparent',
                             border: task.id === selectedTaskId ? '5px solid blue' : '5px solid #000'
                     }}>
-                        <div>Заголовок: <span style={{textDecoration: task.isDone ? 'line-through' : 'none'}}>{task.title}</span></div>
-                        <div>Статус: <input type="checkbox" checked={task.isDone}/></div>
-                        <div>Дата создания задачи: <span>{task.addedAt}</span></div>
+                        <div>Заголовок: <span style={{textDecoration: task.attributes.status === 2 ? 'line-through' : 'none'}}>{task.attributes.title}</span></div>
+                        <div>Статус: <input type="checkbox" checked={task.attributes.status === 2} readOnly/></div>
+                        <div>Дата создания задачи: <span>{new Date(task.attributes.addedAt).toLocaleDateString()}</span></div>
                     </li>
                 ))}
             </ul>
