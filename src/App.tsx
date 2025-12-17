@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+const tasks = [
+    {
+        id: 1,
+        title: "Купить продукты на неделю",
+        isDone: false,
+        addedAt: "1 сентября",
+        priority: 2,
+    },
+    {
+        id: 2,
+        title: "Полить цветы",
+        isDone: true,
+        addedAt: "2 сентября",
+        priority: 0,
+    },
+    {
+        id: 3,
+        title: "Сходить на тренировку",
+        isDone: false,
+        addedAt: "3 сентября",
+        priority: 1,
+    },
+]
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+export function App() {
+
+    if (tasks === null) {
+        return 'загрузка...'
+    }
+
+    if (tasks.length === 0) {
+        return 'Задачи отсутствуют'
+    }
+
+    return (
+        <>
+            <ul className='list'>
+                {tasks.map((task) => (
+                    <li className='item' key={task.id}
+                        style={{backgroundColor: task.priority >= 2 ? 'orange' : 'transparent'}}>
+                        <div>Заголовок: <span style={{textDecoration: task.isDone ? 'line-through' : 'none'}}>{task.title}</span></div>
+                        <div>Статус: <input type="checkbox" checked={task.isDone}/></div>
+                        <div>Дата создания задачи: <span>{task.addedAt}</span></div>
+                    </li>
+                ))}
+            </ul>
+        </>
+    )
 }
 
-export default App
