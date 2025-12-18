@@ -1,0 +1,17 @@
+.item {
+    text-align: left;
+    padding: 10px;
+    border: 5px solid #000;
+}
+
+.item.selected {
+    border-color: blue;
+}
+
+.item div {
+    font-weight: 700;
+}
+
+.item span {
+    font-weight: 400;
+}

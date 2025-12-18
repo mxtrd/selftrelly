@@ -7,15 +7,3 @@
     width: 350px;
 }
 
-.item {
-    text-align: left;
-    padding: 10px;
-}
-
-.item div {
-    font-weight: 700;
-}
-
-.item span {
-    font-weight: 400;
-}
