@@ -1,11 +1,24 @@
 import './App.css';
 import {useEffect, useState} from "react";
 
+type GlobalTaskListItemDto = {
+    id: string,
+    title: string,
+    status: number,
+    priority: number,
+    addedAt: string
+}
+
+type GlobalTaskListItemJsonApiData = {
+    id: string,
+    type: string,
+    attributes: GlobalTaskListItemDto
+}
 
 export function App() {
 
-    const [selectedTaskId, setSelectedTaskId] = useState(null)
-    const [tasks, setTasks] = useState(null)
+    const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
+    const [tasks, setTasks] = useState<GlobalTaskListItemJsonApiData[] | null>(null)
 
     const prepareHeaders = () => {
         const apiKey = import.meta.env.VITE_API_KEY
