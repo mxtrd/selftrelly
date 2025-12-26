@@ -1,16 +1,27 @@
 import {TasksList} from "./ui/TasksList.tsx";
+import {TaskDetails} from "./ui/TaskDetails.tsx";
+import styles from "./MainPage.module.css"
 import {useTaskSelection} from "./bll/useTaskSelection.tsx";
 
 export function MainPage() {
 
-    const {taskId, setTaskId} = useTaskSelection();
+    const {taskId, setTaskId, boardId, setBoardId} = useTaskSelection()
 
-    const handleTaskSelect = (id: string | null): void => {
-        setTaskId(id)
+    const handleTaskSelect = (taskId: string | null, boardId: string | null):void => {
+        setTaskId(taskId)
+        setBoardId(boardId)
     }
 
     return (
-        <TasksList selectedTaskId={taskId} onTaskSelect={handleTaskSelect} />
+        <div className={styles.container}>
+            <TasksList
+                selectedTaskId={taskId}
+                onTaskSelect={handleTaskSelect}
+            />
+            <TaskDetails
+                taskId={taskId}
+                boardId={boardId}
+            />
+        </div>
     )
 }
-

@@ -1,17 +1,30 @@
-.item {
-    text-align: left;
-    padding: 10px;
+.task {
     border: 5px solid #000;
+    width: 350px;
+    padding: 10px;
 }
 
-.item.selected {
-    border-color: blue;
+.task:not(:last-child) {
+    margin-bottom: 20px;
 }
 
-.item div {
-    font-weight: 700;
+.task.selected {
+    border: 5px solid blue;
 }
 
-.item span {
-    font-weight: 400;
+.done span {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.sublist {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sublistItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }

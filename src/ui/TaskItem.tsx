@@ -1,30 +1,39 @@
-import styles from "./TaskItem.module.css";
-import type {GlobalTaskListItemJsonApiData} from "../dal/types.ts";
+import type {GlobalTaskListItemJsonApiData} from "../dal/api.ts";
 import clsx from "clsx";
+import styles from "./TaskItem.module.css";
 
 type Props = {
     task: GlobalTaskListItemJsonApiData,
     isSelected: boolean,
-    onSelect: (taskId: string) => void
+    onSelect: (taskId: string, boardId: string) => void
 }
 
-export function TaskItem({task, isSelected, onSelect} : Props)  {
-
-    const handleClick = () => onSelect?.(task.id)
+export function TaskItem({task, isSelected, onSelect}: Props) {
+    const handleClick = () => {
+        onSelect?.(task.id, task.attributes.boardId)
+    }
 
     const className = clsx({
-        [styles.item]: true,
-        [styles.selected]: isSelected,
+        [styles.task]: true,
+        [styles.selected]: isSelected
     })
 
     return (
-        <li className={className} key={task.id} onClick={handleClick}
-            style={{
-                backgroundColor: task.attributes.priority >= 2 ? 'orange' : 'transparent',
-            }}>
-            <div>Заголовок: <span style={{textDecoration: task.attributes.status === 2 ? 'line-through' : 'none'}}>{task.attributes.title}</span></div>
-            <div>Статус: <input type="checkbox" checked={task.attributes.status === 2} readOnly/></div>
-            <div>Дата создания задачи: <span>{new Date(task.attributes.addedAt).toLocaleDateString()}</span></div>
+        <li onClick={handleClick} className={className}>
+            <ul className={styles.sublist}>
+                <li className={styles.sublistItem}>
+                    <h3>Заголовок:</h3>
+                    <span>{task.attributes.title}</span>
+                </li>
+                <li className={styles.sublistItem}>
+                    <h3>Статус:</h3>
+                    <input type="checkbox" readOnly checked={task.attributes.status === 2}/>
+                </li>
+                <li className={styles.sublistItem}>
+                    <h3>Дата создания задачи:</h3>
+                    <span>{new Date(task.attributes.addedAt).toLocaleDateString()}</span>
+                </li>
+            </ul>
         </li>
     )
 }
